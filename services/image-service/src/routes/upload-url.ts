@@ -90,7 +90,7 @@ export function uploadUrlRoute(deps: RouteDeps) {
       // ── Save record ───────────────────────────────────────────────────
       const record: StoredImageRecord = {
         imageRef,
-        tenantId: (request as Record<string, unknown>)["tenantId"] as string ?? "internal",
+        tenantId: ((request as unknown as Record<string, unknown>)["tenantId"] as string) ?? "internal",
         storageKey,
         contentType: contentType as AllowedImageType,
         fileSizeBytes,
