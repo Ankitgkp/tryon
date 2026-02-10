@@ -26,23 +26,14 @@ export interface ApiMeta {
 }
 
 // ─── POST /v1/tryon ──────────────────────────────────────────────────────────
-
-export interface TryOnRequest {
-  /** URL or reference ID of the user's photo. */
-  userImageRef: string;
-  /** URL or reference ID of the garment image. */
-  garmentImageRef: string;
-  /** Optional parameters forwarded to the AI provider. */
-  options?: Record<string, unknown>;
-}
-
-export interface TryOnResult {
-  /** Job ID for async polling. */
-  jobId: string;
-  status: TryOnJobStatus;
-}
-
-export type TryOnJobStatus = "queued" | "processing" | "completed" | "failed";
+//
+// Try-on request/result types have moved to ./tryon.ts with richer
+// orchestrator-aware contracts (CreateTryOnRequest, CreateTryOnResult,
+// TryOnJob, TryOnJobStatus, etc.).
+//
+// The old TryOnRequest / TryOnResult / TryOnJobStatus stubs are removed to
+// avoid duplication. Import from "@tryon/shared-types" — the barrel
+// re-exports everything from tryon.ts.
 
 // ─── POST /v1/upload-image ───────────────────────────────────────────────────
 
