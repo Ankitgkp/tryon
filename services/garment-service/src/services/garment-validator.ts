@@ -1,7 +1,6 @@
 import {
   GARMENT_TYPES,
   GARMENT_CATEGORIES,
-  type CreateGarmentRequest,
   type GarmentType,
   type GarmentCategory,
 } from "@tryon/shared-types";
