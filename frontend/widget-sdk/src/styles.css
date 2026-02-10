@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * TryOn Widget SDK — Additional styles
+ *
+ * Inherits all CSS custom properties from @tryon/ui-kit.
+ * Widget-specific layout styles below.
+ */
+
+:root {
+  --tryon-color-primary: #6366f1;
+  --tryon-color-primary-hover: #4f46e5;
+  --tryon-color-primary-text: #ffffff;
+  --tryon-color-surface: #ffffff;
+  --tryon-color-surface-alt: #f9fafb;
+  --tryon-color-border: #e5e7eb;
+  --tryon-color-text-primary: #111827;
+  --tryon-color-text-secondary: #6b7280;
+  --tryon-color-error: #ef4444;
+  --tryon-color-error-bg: #fef2f2;
+  --tryon-color-error-text: #991b1b;
+  --tryon-color-overlay: rgba(0, 0, 0, 0.5);
+  --tryon-radius: 0.5rem;
+  --tryon-radius-lg: 0.75rem;
+  --tryon-font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Result comparison layout */
+.tryon-result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .tryon-result-grid {
+    grid-template-columns: 1fr;
+  }
+}

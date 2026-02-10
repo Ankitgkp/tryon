@@ -15,7 +15,7 @@ export class InMemoryJobStore implements JobStore {
 
   async findByTenantId(tenantId: string): Promise<TryOnJob[]> {
     const results: TryOnJob[] = [];
-    for (const job of this.jobs.values()) {
+    for (const job of Array.from(this.jobs.values())) {
       if (job.tenantId === tenantId) {
         results.push({ ...job });
       }
