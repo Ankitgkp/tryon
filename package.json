@@ -4,6 +4,7 @@
   "private": true,
   "description": "Enterprise-grade AI virtual clothing try-on platform",
   "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -n \"gateway,tenant,image,garment,orchestrator,ai\" -c \"blue,green,yellow,magenta,cyan,red\" \"pnpm --filter @tryon/api-gateway dev\" \"pnpm --filter @tryon/tenant-service dev\" \"pnpm --filter @tryon/image-service dev\" \"pnpm --filter @tryon/garment-service dev\" \"pnpm --filter @tryon/tryon-orchestrator dev\" \"pnpm --filter @tryon/ai-generation dev\"",
     "build": "pnpm -r run build",
     "lint": "pnpm -r run lint",
     "lint:fix": "pnpm -r run lint:fix",
@@ -16,5 +17,8 @@
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@9.15.4",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }

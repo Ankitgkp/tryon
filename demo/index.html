@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TryOn Widget — Demo</title>
+
+  <!-- Widget styles -->
+  <link rel="stylesheet" href="../frontend/widget-sdk/dist/widget-sdk.css" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* ── Header ────────────────────────────────────────── */
+    header {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    header span {
+      font-size: 13px;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* ── Product Grid ─────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      transition: box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      object-position: top;
+      background: #f1f5f9;
+      display: block;
+    }
+
+    .product-info {
+      padding: 20px;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 16px;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .btn-cart {
+      background: #f1f5f9;
+      color: #1e293b;
+      flex: 1;
+    }
+
+    .btn-cart:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-tryon {
+      background: #2563eb;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-tryon:hover {
+      background: #1d4ed8;
+    }
+
+    /* ── Console ────────────────────────────────────────── */
+    .console-panel {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    .console-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .console-output {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .console-output .log {
+      padding: 2px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .console-output .log:last-child {
+      border-bottom: none;
+    }
+
+    .console-output .time {
+      color: #64748b;
+      margin-right: 8px;
+    }
+
+    .console-output .success {
+      color: #4ade80;
+    }
+
+    .console-output .error {
+      color: #f87171;
+    }
+
+    .console-output .info {
+      color: #60a5fa;
+    }
+
+    /* ── Config Panel ───────────────────────────────────── */
+    .config-panel {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    .config-box {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .config-box label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .config-box input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'SF Mono', monospace;
+      margin-bottom: 16px;
+    }
+
+    .config-box input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .config-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .config-note {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: -8px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>🛍️ Demo Store</h1>
+    <span>TryOn Widget SDK Demo</span>
+  </header>
+
+  <!-- Configuration -->
+  <div class="config-panel">
+    <div class="config-box">
+      <div class="config-row">
+        <div>
+          <label>API Key</label>
+          <input type="text" id="apiKeyInput" placeholder="tryon_abc12345_secret…" />
+          <p class="config-note">Leave blank to test the widget UI without a backend</p>
+        </div>
+        <div>
+          <label>API Base URL</label>
+          <input type="text" id="apiBaseUrlInput" placeholder="http://localhost:3000/v1" value="http://localhost:3000/v1" />
+          <p class="config-note">Points to your local API gateway by default</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="container">
+    <h2 class="page-title">Summer Collection</h2>
+    <p class="page-subtitle">Click "Try On" to open the virtual try-on widget</p>
+
+    <div class="product-grid">
+
+      <!-- Product 1 -->
+      <div class="product-card">
+        <img
+          class="product-image"
+          src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&h=800&fit=crop&crop=top"
+          alt="Blue Linen Shirt"
+        />
+        <div class="product-info">
+          <p class="product-name">Blue Linen Shirt</p>
+          <p class="product-price">$49.00</p>
+          <div class="product-actions">
+            <button class="btn btn-cart">Add to Cart</button>
+            <button class="btn btn-tryon" onclick="openTryOn('gmt_shirt_001', 'TOP', 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&h=800&fit=crop&crop=top')">
+              Try On
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card">
+        <img
+          class="product-image"
+          src="https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=600&h=800&fit=crop&crop=top"
+          alt="Floral Summer Dress"
+        />
+        <div class="product-info">
+          <p class="product-name">Floral Summer Dress</p>
+          <p class="product-price">$79.00</p>
+          <div class="product-actions">
+            <button class="btn btn-cart">Add to Cart</button>
+            <button class="btn btn-tryon" onclick="openTryOn('gmt_dress_002', 'DRESS', 'https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=600&h=800&fit=crop&crop=top')">
+              Try On
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="product-card">
+        <img
+          class="product-image"
+          src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=800&fit=crop&crop=top"
+          alt="Classic Denim Jacket"
+        />
+        <div class="product-info">
+          <p class="product-name">Classic Denim Jacket</p>
+          <p class="product-price">$129.00</p>
+          <div class="product-actions">
+            <button class="btn btn-cart">Add to Cart</button>
+            <button class="btn btn-tryon" onclick="openTryOn('gmt_jacket_003', 'OUTERWEAR', 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=800&fit=crop&crop=top')">
+              Try On
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Event Console -->
+  <div class="console-panel">
+    <p class="console-title">Event Log</p>
+    <div class="console-output" id="console">
+      <div class="log"><span class="time">[--:--:--]</span><span class="info">Widget SDK loaded. Click "Try On" on any product.</span></div>
+    </div>
+  </div>
+
+  <!-- Widget script -->
+  <script src="../frontend/widget-sdk/dist/tryon-widget.iife.js"></script>
+
+  <script>
+    // ── Logging helper ─────────────────────────────────────────────
+    function log(message, type) {
+      var el = document.getElementById('console');
+      var now = new Date().toTimeString().split(' ')[0];
+      var div = document.createElement('div');
+      div.className = 'log';
+      div.innerHTML = '<span class="time">[' + now + ']</span>' +
+        '<span class="' + (type || 'info') + '">' + escapeHtml(message) + '</span>';
+      el.appendChild(div);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function escapeHtml(s) {
+      var d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // ── Widget management ──────────────────────────────────────────
+    var currentWidget = null;
+
+    function openTryOn(garmentId, garmentType, imageUrl) {
+      // Clean up previous widget
+      if (currentWidget) {
+        currentWidget.destroy();
+        currentWidget = null;
+      }
+
+      var apiKey = document.getElementById('apiKeyInput').value.trim();
+      var apiBaseUrl = document.getElementById('apiBaseUrlInput').value.trim();
+
+      if (!apiKey) {
+        apiKey = 'demo_key_no_backend';
+        log('No API key set — widget will open but API calls will fail (expected for UI testing)', 'info');
+      }
+
+      log('Opening widget for garment: ' + garmentId + ' (type: ' + garmentType + ')', 'info');
+
+      currentWidget = TryOn.init({
+        apiKey: apiKey,
+        apiBaseUrl: apiBaseUrl || undefined,
+        garment: { imageUrl: imageUrl, type: garmentType },
+        onOpen: function() {
+          log('Modal opened', 'info');
+        },
+        onClose: function() {
+          log('Modal closed', 'info');
+        },
+        onResult: function(result) {
+          log('✅ Try-on complete! Image: ' + result.imageUrl + ' (took ' + (result.processingTimeMs / 1000).toFixed(1) + 's)', 'success');
+        },
+        onError: function(error) {
+          log('❌ Error [' + error.code + ']: ' + error.message, 'error');
+        },
+      });
+
+      // Immediately open
+      currentWidget.open();
+    }
+  </script>
+
+</body>
+</html>

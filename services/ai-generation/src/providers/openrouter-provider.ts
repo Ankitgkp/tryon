@@ -51,8 +51,16 @@ export class OpenRouterProvider implements AIProvider {
                   text: request.prompt,
                 },
                 {
+                  type: "text" as const,
+                  text: "\n\n[CUSTOMER PHOTO — this is the person to dress:]",
+                },
+                {
                   type: "image_url" as const,
                   imageUrl: { url: request.userImageUrl },
+                },
+                {
+                  type: "text" as const,
+                  text: "\n\n[EXACT PRODUCT IMAGE — reproduce this garment with 100% fidelity, do NOT change any detail:]",
                 },
                 {
                   type: "image_url" as const,
@@ -62,14 +70,26 @@ export class OpenRouterProvider implements AIProvider {
                 ...(request.garmentMaskUrl
                   ? [
                       {
+                        type: "text" as const,
+                        text: "\n\n[GARMENT MASK:]",
+                      },
+                      {
                         type: "image_url" as const,
                         imageUrl: { url: request.garmentMaskUrl },
                       },
                     ]
                   : []),
+                {
+                  type: "text" as const,
+                  text:
+                    "\n\nREMINDER: The garment in the output MUST be visually identical to the product image above. " +
+                    "Same exact colors, same exact pattern, same exact design. " +
+                    "Generate a single photorealistic image of the customer wearing this exact product.",
+                },
               ],
             },
           ],
+          // Sourceful Riverflow models are image-only generators — use ["image"]
           modalities: ["image"],
           stream: false,
         },
@@ -83,7 +103,10 @@ export class OpenRouterProvider implements AIProvider {
       const chatResponse = result as {
         choices: Array<{
           message: {
-            images?: Array<{ imageUrl: { url: string } }>;
+            images?: Array<{
+              image_url?: { url: string };
+              imageUrl?: { url: string };
+            }>;
           };
         }>;
       };
@@ -95,7 +118,7 @@ export class OpenRouterProvider implements AIProvider {
         );
       }
 
-      // AssistantMessage.images: Array<{ imageUrl: { url: string } }> | undefined
+      // images array may use snake_case (image_url) or camelCase (imageUrl)
       const images = message.images;
 
       if (!images || images.length === 0) {
@@ -112,7 +135,14 @@ export class OpenRouterProvider implements AIProvider {
         );
       }
 
-      const imageUrl = firstImage.imageUrl.url;
+      const imageUrl =
+        firstImage.image_url?.url ?? firstImage.imageUrl?.url ?? "";
+
+      if (!imageUrl) {
+        throw new TransientProviderError(
+          "OpenRouter returned image entry without URL",
+        );
+      }
 
       return {
         imageUrl,
@@ -127,13 +157,24 @@ export class OpenRouterProvider implements AIProvider {
         throw err;
       }
 
-      // Classify HTTP errors
-      const error = err as { statusCode?: number; status?: number; message?: string };
-      const status = error.statusCode ?? error.status;
+      // Classify HTTP errors — try direct properties first, then parse from message
+      const error = err as { statusCode?: number; status?: number; message?: string; code?: number };
+      let status = error.statusCode ?? error.status ?? error.code;
 
-      if (status === 401 || status === 403) {
+      // OpenRouter SDK wraps errors as "Status 402\nBody: {...}" — extract status
+      if (!status && error.message) {
+        const match = error.message.match(/Status (\d{3})/);
+        if (match?.[1]) status = parseInt(match[1], 10);
+      }
+      if (!status) {
+        const errStr = String(err);
+        const match = errStr.match(/Status (\d{3})/);
+        if (match?.[1]) status = parseInt(match[1], 10);
+      }
+
+      if (status === 401 || status === 402 || status === 403) {
         throw new PermanentProviderError(
-          `OpenRouter authentication failed (${status}): ${error.message ?? "Invalid API key"}`,
+          `OpenRouter authentication/billing failed (${status}): ${error.message ?? "Invalid API key or insufficient credits"}`,
           status,
         );
       }

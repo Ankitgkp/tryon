@@ -8,6 +8,7 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
 
 import type { GatewayConfig } from "./config/index.js";
 import { requestLogger, apiKeyAuth, errorHandler } from "./middleware/index.js";
@@ -34,6 +35,12 @@ export async function buildApp(config: GatewayConfig): Promise<FastifyInstance> 
     origin: config.env === "production" ? false : true, // Lock down in prod
   });
   await app.register(helmet);
+  await app.register(multipart, {
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10 MB
+      files: 1,
+    },
+  });
 
   // ── Global hooks ────────────────────────────────────────────────────────
   // Request logging runs first — assigns requestId.

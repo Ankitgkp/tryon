@@ -29,6 +29,7 @@ export async function buildApp(
       }),
     },
     genReqId: () => crypto.randomUUID(),
+    bodyLimit: 10 * 1024 * 1024, // 10 MB — requests carry base64 images
   });
 
   // ── Security ────────────────────────────────────────────────────────────

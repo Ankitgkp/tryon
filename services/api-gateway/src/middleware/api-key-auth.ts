@@ -23,11 +23,21 @@ function getTenantServiceUrl(): string {
  * Validates the API key by calling the tenant-service.
  * On success, attaches tenantId and plan to the request.
  * On failure, sends 401 and short-circuits the request.
+ *
+ * In development, set AUTH_BYPASS=true to skip validation entirely.
  */
 export async function apiKeyAuth(
   request: FastifyRequest,
   reply: FastifyReply
 ): Promise<void> {
+  // ── Dev bypass ────────────────────────────────────────────────────────
+  // Skip real auth when AUTH_BYPASS=true (local development only).
+  if (process.env["AUTH_BYPASS"] === "true") {
+    request.tenantId = "dev_tenant";
+    request.tenantPlan = "enterprise";
+    return;
+  }
+
   const apiKey = request.headers["x-api-key"];
 
   if (!apiKey || typeof apiKey !== "string") {

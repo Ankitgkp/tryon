@@ -15,18 +15,18 @@ import type { ModelTier, ResolvedModel } from "@tryon/shared-types";
 const MODEL_MAP: Record<ModelTier, ResolvedModel> = {
   standard: {
     providerId: "openrouter",
-    modelId: "bytedance-seed/seedream-4.5",
-    displayName: "Seedream 4.5 (Standard)",
+    modelId: "sourceful/riverflow-v2-fast-preview",
+    displayName: "Riverflow V2 Fast (Standard — $0.03/img)",
   },
   premium: {
     providerId: "openrouter",
-    modelId: "bytedance-seed/seedream-4.5",
-    displayName: "Seedream 4.5 (Premium)",
+    modelId: "sourceful/riverflow-v2-standard-preview",
+    displayName: "Riverflow V2 Standard (Premium — $0.035/img)",
   },
   experimental: {
     providerId: "openrouter",
-    modelId: "bytedance-seed/seedream-4.5",
-    displayName: "Seedream 4.5 (Experimental)",
+    modelId: "sourceful/riverflow-v2-max-preview",
+    displayName: "Riverflow V2 Max (Experimental — $0.075/img)",
   },
 };
 
