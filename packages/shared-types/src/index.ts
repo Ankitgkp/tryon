@@ -10,3 +10,4 @@
 export * from "./api.js";
 export * from "./tenant.js";
 export * from "./image.js";
+export * from "./garment.js";
