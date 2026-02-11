@@ -29,7 +29,6 @@ import type { ImageRecordStore } from "../store/image-record-store.js";
 import { validateUploadRequest, clampTtl } from "../services/image-validator.js";
 import { randomUUID } from "node:crypto";
 
-/** Pre-signed upload URLs are valid for 15 minutes. */
 const UPLOAD_URL_TTL_SECONDS = 900;
 
 interface RouteDeps {
@@ -43,7 +42,7 @@ export function uploadUrlRoute(deps: RouteDeps) {
       const body = request.body ?? {};
       const { contentType, fileSizeBytes, purpose, ttlSeconds } = body;
 
-      // ── Input presence check ──────────────────────────────────────────
+
       if (!contentType || !fileSizeBytes || !purpose) {
         const response: ApiResponse = {
           success: false,
@@ -55,7 +54,7 @@ export function uploadUrlRoute(deps: RouteDeps) {
         return reply.status(400).send(response);
       }
 
-      // ── Policy validation ─────────────────────────────────────────────
+ 
       const violations = validateUploadRequest(contentType, fileSizeBytes);
       if (violations.length > 0) {
         const response: ApiResponse = {
@@ -69,16 +68,14 @@ export function uploadUrlRoute(deps: RouteDeps) {
         return reply.status(400).send(response);
       }
 
-      // ── Generate identifiers ──────────────────────────────────────────
       const imageRef = `img_${randomUUID()}`;
-      // Storage key includes purpose for bucket/prefix organization
       const storageKey = `${purpose}/${imageRef}`;
       const effectiveTtl = clampTtl(ttlSeconds);
       const imageExpiresAt = new Date(
         Date.now() + effectiveTtl * 1000
       ).toISOString();
 
-      // ── Create pre-signed URL ─────────────────────────────────────────
+
       const presigned = await deps.storage.createPresignedUploadUrl({
         key: storageKey,
         contentType,
@@ -87,7 +84,7 @@ export function uploadUrlRoute(deps: RouteDeps) {
         objectExpiresAt: imageExpiresAt,
       });
 
-      // ── Save record ───────────────────────────────────────────────────
+
       const record: StoredImageRecord = {
         imageRef,
         tenantId: ((request as unknown as Record<string, unknown>)["tenantId"] as string) ?? "internal",
@@ -101,7 +98,7 @@ export function uploadUrlRoute(deps: RouteDeps) {
       };
       await deps.recordStore.save(record);
 
-      // ── Response ──────────────────────────────────────────────────────
+
       const result: UploadUrlResult = {
         uploadUrl: presigned.url,
         imageRef,
