@@ -30,9 +30,7 @@ const MODEL_MAP: Record<ModelTier, ResolvedModel> = {
   },
 };
 
-/**
- * Resolve a model tier to a concrete provider + model ID.
- */
+
 export function resolveModel(tier: ModelTier): ResolvedModel {
   const model = MODEL_MAP[tier];
   if (!model) {
@@ -41,9 +39,6 @@ export function resolveModel(tier: ModelTier): ResolvedModel {
   return model;
 }
 
-/**
- * List all registered model mappings (for health/debug endpoints).
- */
 export function listModelMappings(): Record<ModelTier, ResolvedModel> {
   return { ...MODEL_MAP };
 }
