@@ -66,7 +66,6 @@ export class OpenRouterProvider implements AIProvider {
                   type: "image_url" as const,
                   imageUrl: { url: request.garmentImageUrl },
                 },
-                // Include mask if available
                 ...(request.garmentMaskUrl
                   ? [
                       {
@@ -89,7 +88,7 @@ export class OpenRouterProvider implements AIProvider {
               ],
             },
           ],
-          // Sourceful Riverflow models are image-only generators — use ["image"]
+
           modalities: ["image"],
           stream: false,
         },
@@ -97,9 +96,6 @@ export class OpenRouterProvider implements AIProvider {
 
       const processingTimeMs = Date.now() - startTime;
 
-      // Extract generated image from response.
-      // With stream: false the SDK returns a ChatResponse (not an EventStream).
-      // We cast to access the typed choices array.
       const chatResponse = result as {
         choices: Array<{
           message: {
@@ -118,7 +114,6 @@ export class OpenRouterProvider implements AIProvider {
         );
       }
 
-      // images array may use snake_case (image_url) or camelCase (imageUrl)
       const images = message.images;
 
       if (!images || images.length === 0) {
@@ -157,7 +152,7 @@ export class OpenRouterProvider implements AIProvider {
         throw err;
       }
 
-      // Classify HTTP errors — try direct properties first, then parse from message
+
       const error = err as { statusCode?: number; status?: number; message?: string; code?: number };
       let status = error.statusCode ?? error.status ?? error.code;
 
@@ -192,8 +187,6 @@ export class OpenRouterProvider implements AIProvider {
           status,
         );
       }
-
-      // Unknown errors default to transient (worth retrying)
       throw new TransientProviderError(
         `OpenRouter unexpected error: ${String(err)}`,
       );
