@@ -12,7 +12,6 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @tryon/shared-types build
 RUN pnpm --filter @tryon/ai-generation build
 
-# --- Production stage ---
 FROM node:20-alpine AS production
 
 RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
