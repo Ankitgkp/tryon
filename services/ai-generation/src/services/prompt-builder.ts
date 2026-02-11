@@ -1,15 +1,6 @@
 import type { GarmentType } from "@tryon/shared-types";
 
-/**
- * Builds the text prompt for the AI model.
- *
- * Adapts the prompt based on garment type so the model knows which
- * body region to target.
- *
- * CRITICAL: The prompt is heavily weighted toward preserving the EXACT
- * garment appearance (color, pattern, design, branding) because this is
- * a product showcase — customers must see the real product on themselves.
- */
+
 export function buildTryOnPrompt(
   garmentType: GarmentType,
   extraContext?: string,
