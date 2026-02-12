@@ -1,20 +1,14 @@
 import { type ButtonHTMLAttributes, forwardRef } from "react";
 import { cn } from "../utils/cn";
 
-/** Visual style variant for the Button. */
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 
-/** Size preset for the Button. */
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Visual style variant. @default "primary" */
   variant?: ButtonVariant;
-  /** Size preset. @default "md" */
   size?: ButtonSize;
-  /** Show a loading spinner and disable interaction. */
   loading?: boolean;
-  /** Stretch to fill container width. */
   fullWidth?: boolean;
 }
 
@@ -35,23 +29,6 @@ const sizeStyles: Record<ButtonSize, string> = {
   lg: "tryon-px-6 tryon-py-3 tryon-text-base",
 };
 
-/**
- * A themeable button component.
- *
- * Supports multiple visual variants and sizes.
- * Forwards refs and spreads all native button attributes.
- *
- * @example
- * ```tsx
- * <Button variant="primary" size="md" onClick={handleClick}>
- *   Submit
- * </Button>
- *
- * <Button variant="secondary" loading>
- *   Processing…
- * </Button>
- * ```
- */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -71,19 +48,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          // Base styles
           "tryon-inline-flex tryon-items-center tryon-justify-center tryon-gap-2",
           "tryon-rounded tryon-font-sans tryon-font-medium",
           "tryon-transition-colors tryon-duration-150 tryon-ease-in-out",
           "focus:tryon-outline-none",
           "disabled:tryon-opacity-50 disabled:tryon-cursor-not-allowed",
-          // Variant
           variantStyles[variant],
-          // Size
           sizeStyles[size],
-          // Full width
           fullWidth && "tryon-w-full",
-          // Custom classes
           className,
         )}
         {...props}
