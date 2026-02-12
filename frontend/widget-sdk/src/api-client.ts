@@ -1,15 +1,9 @@
-/**
- * TryOn API Client.
- *
- * Communicates exclusively with the API Gateway.
- * The SDK never talks to internal services directly.
- */
 
 import type { TryOnResult, GarmentInput } from "./types";
 
 const DEFAULT_BASE_URL = "https://api.tryon.dev/v1";
 const POLL_INTERVAL_MS = 2_000;
-const MAX_POLL_ATTEMPTS = 90; // 3 minutes at 2s intervals
+const MAX_POLL_ATTEMPTS = 90; 
 
 interface ApiResponse<T> {
   success: boolean;
@@ -48,25 +42,22 @@ export class TryOnApiClient {
     this.baseUrl = (baseUrl ?? DEFAULT_BASE_URL).replace(/\/+$/, "");
   }
 
-  /** Upload a user image and get a temporary reference. */
+
   async uploadImage(file: File): Promise<string> {
-    // For now the gateway expects a POST; we send the file as form data.
-    // When the gateway supports multipart, switch to that.
-    // Current stub just returns a mock ref — matches the gateway behavior.
+
     const formData = new FormData();
     formData.append("image", file);
 
     const res = await this.fetch<UploadImageResponse>("/upload-image", {
       method: "POST",
       body: formData,
-      // Don't set Content-Type — browser sets it with boundary for FormData
       rawBody: true,
     });
 
     return res.imageRef;
   }
 
-  /** Create a try-on job. */
+
   async createTryOn(
     userImageRef: string,
     garment: GarmentInput,
@@ -76,7 +67,7 @@ export class TryOnApiClient {
     if ("garmentId" in garment) {
       body.garmentId = garment.garmentId;
     } else {
-      // If passing a raw image URL, the gateway needs both
+
       body.garmentImageUrl = garment.imageUrl;
       body.garmentType = garment.type;
     }
@@ -89,7 +80,7 @@ export class TryOnApiClient {
     return res.jobId;
   }
 
-  /** Poll a try-on job until it reaches a terminal state. */
+
   async pollJob(
     jobId: string,
     onProgress?: (status: string) => void,
@@ -116,7 +107,7 @@ export class TryOnApiClient {
         );
       }
 
-      // Wait before next poll
+
       await sleep(POLL_INTERVAL_MS);
     }
 
@@ -126,7 +117,6 @@ export class TryOnApiClient {
     );
   }
 
-  // ─── Private ─────────────────────────────────────────────────────────────
 
   private async fetch<T>(
     path: string,
