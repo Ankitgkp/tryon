@@ -2,33 +2,12 @@ import type { ReactNode } from "react";
 import { cn } from "../utils/cn";
 
 export interface ErrorStateProps {
-  /** The primary error message shown to the user. */
   message: string;
-  /** Optional detailed description or guidance. */
   description?: string;
-  /** Optional action element (e.g. a retry button). */
   action?: ReactNode;
-  /** Optional custom icon. Defaults to an exclamation triangle. */
   icon?: ReactNode;
-  /** Additional class names for the outer container. */
   className?: string;
 }
-
-/**
- * A styled error state component.
- *
- * Displays an error icon, message, optional description,
- * and an optional action slot (typically a retry button).
- *
- * @example
- * ```tsx
- * <ErrorState
- *   message="Image generation failed"
- *   description="The AI provider returned an error. Please try again."
- *   action={<Button variant="secondary" onClick={retry}>Retry</Button>}
- * />
- * ```
- */
 export function ErrorState({
   message,
   description,
@@ -45,7 +24,6 @@ export function ErrorState({
         className,
       )}
     >
-      {/* Icon */}
       {icon ?? (
         <svg
           className="tryon-h-10 tryon-w-10 tryon-text-error"
@@ -64,19 +42,16 @@ export function ErrorState({
         </svg>
       )}
 
-      {/* Message */}
       <p className="tryon-text-sm tryon-font-semibold tryon-text-error-text tryon-font-sans">
         {message}
       </p>
 
-      {/* Description */}
       {description && (
         <p className="tryon-text-sm tryon-text-error-text/80 tryon-max-w-sm tryon-font-sans">
           {description}
         </p>
       )}
 
-      {/* Action slot */}
       {action && <div className="tryon-mt-1">{action}</div>}
     </div>
   );
