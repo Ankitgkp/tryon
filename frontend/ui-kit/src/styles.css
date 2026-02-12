@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
- * TryOn UI Kit — CSS Custom Property Defaults
- *
- * SDK consumers override these to theme the components.
- * All properties are namespaced with --tryon- to avoid collisions.
- *
- * Example:
- *   :root {
- *     --tryon-color-primary: #0ea5e9;
- *     --tryon-color-primary-hover: #0284c7;
- *     --tryon-radius: 0.75rem;
- *   }
- */
-
 :root {
   --tryon-color-primary: #6366f1;
   --tryon-color-primary-hover: #4f46e5;
