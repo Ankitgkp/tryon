@@ -7,52 +7,24 @@ import {
 } from "react";
 import { cn } from "../utils/cn";
 
-/** Describes a file selected or dropped by the user. */
 export interface SelectedFile {
-  /** The original File object. */
   file: File;
-  /** A local object URL for previewing the image. Revoke when done. */
   previewUrl: string;
 }
 
 export interface ImageUploaderProps {
-  /** Called with the selected file info when a valid image is picked. */
   onFileSelect: (file: SelectedFile) => void;
-  /** Called when the user-selected file fails validation. */
   onError?: (message: string) => void;
-  /** Accepted MIME types. @default ["image/jpeg","image/png","image/webp"] */
   acceptedTypes?: string[];
-  /** Maximum file size in bytes. @default 10_485_760 (10 MB) */
   maxSizeBytes?: number;
-  /** Label text shown in the drop zone. @default "Drag & drop an image, or click to browse" */
   label?: string;
-  /** Whether the uploader is disabled. */
   disabled?: boolean;
-  /** Additional class names for the outer container. */
   className?: string;
 }
 
 const DEFAULT_ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 const DEFAULT_MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
-/**
- * A drag-and-drop image upload zone.
- *
- * Validates file type and size, then provides a preview URL
- * to the consumer. No upload logic — that's the SDK's job.
- *
- * @example
- * ```tsx
- * <ImageUploader
- *   onFileSelect={({ file, previewUrl }) => {
- *     setPreview(previewUrl);
- *     uploadToServer(file);
- *   }}
- *   onError={(msg) => setError(msg)}
- *   maxSizeBytes={5 * 1024 * 1024}
- * />
- * ```
- */
 export function ImageUploader({
   onFileSelect,
   onError,
@@ -106,7 +78,6 @@ export function ImageUploader({
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) validateAndEmit(file);
-    // Reset so the same file can be re-selected
     e.target.value = "";
   };
 
@@ -145,7 +116,6 @@ export function ImageUploader({
         className,
       )}
     >
-      {/* Upload icon */}
       <svg
         className="tryon-h-10 tryon-w-10 tryon-text-text-secondary"
         xmlns="http://www.w3.org/2000/svg"
