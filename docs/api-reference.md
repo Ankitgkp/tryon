@@ -120,10 +120,10 @@ Create a virtual try-on job. The job is processed asynchronously.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `userImageRef` | `string` | ✅ | Image ref from `/upload-image` |
-| `garmentId` | `string` | ✅* | ID of a garment from the catalog |
-| `garmentImageUrl` | `string` | ✅* | Direct URL to a garment image |
-| `garmentType` | `string` | ✅* | Required with `garmentImageUrl` |
+| `userImageRef` | `string`| Image ref from `/upload-image` |
+| `garmentId` | `string`  | ID of a garment from the catalog |
+| `garmentImageUrl` | `string` | Direct URL to a garment image |
+| `garmentType` | `string` | Required with `garmentImageUrl` |
 
 *Provide either `garmentId` OR both `garmentImageUrl` + `garmentType`.
 
