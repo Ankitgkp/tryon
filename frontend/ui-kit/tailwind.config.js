@@ -1,12 +1,9 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{ts,tsx}"],
-  // Prefix all utility classes so they don't clash with host app styles
   prefix: "tryon-",
   theme: {
     extend: {
       colors: {
-        // Semantic tokens — SDK consumers override these via CSS variables
         primary: "var(--tryon-color-primary, #6366f1)",
         "primary-hover": "var(--tryon-color-primary-hover, #4f46e5)",
         "primary-text": "var(--tryon-color-primary-text, #ffffff)",
