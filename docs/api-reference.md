@@ -44,14 +44,14 @@ Every response follows this shape:
 ```ts
 {
   success: boolean;
-  data?: T;                // Present on success
+  data?: T;                
   error?: {
-    code: string;          // Machine-readable (e.g. "INVALID_INPUT")
-    message: string;       // Human-readable
+    code: string;          
+    message: string;       
   };
   meta?: {
-    requestId: string;     // Unique ID for support debugging
-    timestamp: string;     // ISO 8601
+    requestId: string;     
+    timestamp: string;     
   };
 }
 ```
@@ -81,7 +81,7 @@ Upload a user photo and receive a temporary image reference.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `image` | `File` | ✅ | JPEG, PNG, or WebP. Max 10 MB. |
+| `image` | `File` | JPEG, PNG, or WebP. Max 10 MB. |
 
 **Response** — `201 Created`:
 
