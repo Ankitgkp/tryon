@@ -68,10 +68,10 @@ Tenant dashboard:
   Allowed domains: ["https://shop.example.com", "*.example.com"]
 
 Browser → API Gateway:
-  Origin: https://shop.example.com     ✅ Allowed
-  Origin: https://evil.com             ❌ Blocked (403)
-  Origin: https://app.example.com      ✅ Allowed (wildcard match)
-  No Origin header (server-to-server)  ❌ Blocked when allowlist is configured
+  Origin: https://shop.example.com     Allowed
+  Origin: https://evil.com             Blocked (403)
+  Origin: https://app.example.com      Allowed (wildcard match)
+  No Origin header (server-to-server)  Blocked when allowlist is configured
 ```
 
 ### How it works
@@ -287,13 +287,3 @@ These are included in every API response `meta` object and can be used for suppo
 - [ ] **Key rotation plan** — rotate keys periodically or on team member departure
 - [ ] **Staging key separated** — use a different API key for staging/development
 - [ ] **Error callbacks implemented** — handle `onError` to log issues to your monitoring
-
----
-
-## Vulnerability reporting
-
-If you discover a security vulnerability, please report it responsibly:
-
-- Email: security@tryon.dev
-- Do **not** open a public GitHub issue for security vulnerabilities
-- We aim to respond within 24 hours and resolve within 72 hours
