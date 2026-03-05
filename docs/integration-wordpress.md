@@ -164,7 +164,7 @@ function tryon_render_settings_page() {
 **With custom button text and color:**
 
 ```
-[tryon_widget garment_id="gmt_abc123" button_text="Try This On ✨" color="#8B5CF6"]
+[tryon_widget garment_id="gmt_abc123" button_text="Try This On" color="#8B5CF6"]
 ```
 
 ---
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     apiKey: "tryon_abc12345_secret…",
     garment: { garmentId: "gmt_abc123" },
     container: "#tryon-gutenberg",
-    triggerText: "Virtual Try-On ✨",
+    triggerText: "Virtual Try-On",
   });
 });
 </script>
@@ -440,7 +440,3 @@ The TryOn widget's CSS is scoped with the `tryon-` prefix, so style conflicts ar
 - Ensure the script loads with `defer`
 - Initialize inside `DOMContentLoaded`
 - Check for jQuery `noConflict` issues
-
-### Caching plugins
-
-If WP Super Cache, W3 Total Cache, or similar plugins are active, clear the cache after making changes. The widget scripts can be safely cached — they don't contain page-specific data.
