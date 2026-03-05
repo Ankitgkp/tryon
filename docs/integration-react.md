@@ -51,8 +51,8 @@ Clicking the child element opens a modal with the full try-on flow: upload → p
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `apiKey` | `string` | ✅ | — | Your API key from the TryOn dashboard |
-| `garment` | `GarmentInput` | ✅ | — | Garment to try on (see below) |
+| `apiKey` | `string` | — | Your API key from the TryOn dashboard |
+| `garment` | `GarmentInput`  — | Garment to try on (see below) |
 | `apiBaseUrl` | `string` | | `https://api.tryon.dev/v1` | Custom API gateway URL |
 | `theme` | `TryOnTheme` | | — | Visual customization (see [Theming](#theming)) |
 | `open` | `boolean` | | — | Control modal open state externally |
@@ -409,12 +409,4 @@ import type {
   WidgetStep,
   WidgetState,
 } from "@tryon/widget-sdk";
-```
-
----
-
-## Style isolation
-
-All CSS classes are prefixed with `tryon-` to avoid conflicts with your existing styles. The widget renders inside a scoped container and uses CSS custom properties for theming — it will not affect your application's styles.
-
-If your project uses Tailwind CSS, there is zero class name collision because of the prefix.
+```\
