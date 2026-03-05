@@ -76,8 +76,8 @@ Host them on your own CDN or static file server:
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
-| `apiKey` | `string` | ✅ | — | Your API key |
-| `garment` | `object` | ✅ | — | Garment to try on |
+| `apiKey` | `string` |  | — | Your API key |
+| `garment` | `object` |  | — | Garment to try on |
 | `container` | `string \| HTMLElement` | | `document.body` | Mount target |
 | `triggerText` | `string` | | `"Try On"` | Text for the trigger button |
 | `apiBaseUrl` | `string` | | `https://api.tryon.dev/v1` | Custom API URL |
@@ -150,7 +150,7 @@ If you omit `container`, the widget creates a floating container appended to `<b
   TryOn.init({
     apiKey: "tryon_abc12345_secret…",
     garment: { garmentId: "gmt_abc123" },
-    triggerText: "Virtual Try-On ✨",
+    triggerText: "Virtual Try-On ",
   });
 </script>
 ```
